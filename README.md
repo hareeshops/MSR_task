@@ -1,5 +1,4 @@
-Files inside source
-
+```
 .
 ├── 1.K8S_setup_kubeadm
 │   ├── 1.Kubernetes_setup.txt
@@ -22,4 +21,4 @@ Files inside source
         ├── lb.yaml
         └── tomcat-deploy.yaml
 
-7 directories, 13 files
+7 directories, 13 files ```
