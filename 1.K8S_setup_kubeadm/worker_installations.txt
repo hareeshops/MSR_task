@@ -1,0 +1,1007 @@
+root@192.168.43.99's password:
+     +--------------------------------------------------------------------+
+     ¦                        • MobaXterm 11.0 •                          ¦
+     ¦            (SSH client, X-server and networking tools)             ¦
+     ¦                                                                    ¦
+     ¦ ? SSH session to root@192.168.43.99                                ¦
+     ¦   • SSH compression : ?                                            ¦
+     ¦   • SSH-browser     : ?                                            ¦
+     ¦   • X11-forwarding  : ?  (disabled or not supported by server)     ¦
+     ¦   • DISPLAY         : 192.168.43.152:0.0                           ¦
+     ¦                                                                    ¦
+     ¦ ? For more info, ctrl+click on help or visit our website           ¦
+     +--------------------------------------------------------------------+
+
+Last login: Sat Apr 27 02:39:50 2019
+[root@knode ~]#
+[root@knode ~]# systemctl stop firewalld
+[root@knode ~]# systemctl disable firewalld
+Removed symlink /etc/systemd/system/multi-user.target.wants/firewalld.service.
+Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
+[root@knode ~]# swapoff -a
+[root@knode ~]# sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
+[root@knode ~]# setenforce 0
+[root@knode ~]# sed -i 's/enforcing/disabled/g' /etc/selinux/config
+[root@knode ~]# cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+> [kubernetes]
+> name=Kubernetes
+> baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+> enabled=1
+> gpgcheck=1
+> repo_gpgcheck=1
+> gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+> exclude=kube*
+> EOF
+[root@knode ~]# yum update -y
+
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+ * base: ftp.iitm.ac.in
+ * extras: centos.mirrors.estointernet.in
+ * updates: centos.mirrors.estointernet.in
+base                                                                                                        | 3.6 kB  00:00:00
+extras                                                                                                      | 3.4 kB  00:00:00
+kubernetes/signature                                                                                        |  454 B  00:00:00
+Retrieving key from https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Importing GPG key 0xA7317B0F:
+ Userid     : "Google Cloud Packages Automatic Signing Key <gc-team@google.com>"
+ Fingerprint: d0bc 747f d8ca f711 7500 d6fa 3746 c208 a731 7b0f
+ From       : https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Retrieving key from https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+kubernetes/signature                                                                                        | 1.4 kB  00:00:00 !!!
+updates                                                                                                     | 3.4 kB  00:00:00
+(1/5): base/7/x86_64/group_gz                                                                               | 166 kB  00:00:01
+(2/5): extras/7/x86_64/primary_db                                                                           | 188 kB  00:00:16
+(3/5): kubernetes/primary                                                                                   |  47 kB  00:00:16
+(4/5): updates/7/x86_64/primary_db                                                                          | 3.4 MB  00:00:17
+(5/5): base/7/x86_64/primary_db                                                                             | 6.0 MB  00:00:19
+kubernetes                                                                                                                 342/342
+Resolving Dependencies
+--> Running transaction check
+---> Package NetworkManager.x86_64 1:1.12.0-6.el7 will be updated
+---> Package NetworkManager.x86_64 1:1.12.0-10.el7_6 will be an update
+---> Package NetworkManager-libnm.x86_64 1:1.12.0-6.el7 will be updated
+---> Package NetworkManager-libnm.x86_64 1:1.12.0-10.el7_6 will be an update
+---> Package NetworkManager-team.x86_64 1:1.12.0-6.el7 will be updated
+---> Package NetworkManager-team.x86_64 1:1.12.0-10.el7_6 will be an update
+---> Package NetworkManager-tui.x86_64 1:1.12.0-6.el7 will be updated
+---> Package NetworkManager-tui.x86_64 1:1.12.0-10.el7_6 will be an update
+---> Package NetworkManager-wifi.x86_64 1:1.12.0-6.el7 will be updated
+---> Package NetworkManager-wifi.x86_64 1:1.12.0-10.el7_6 will be an update
+---> Package bind-libs-lite.x86_64 32:9.9.4-72.el7 will be updated
+---> Package bind-libs-lite.x86_64 32:9.9.4-73.el7_6 will be an update
+---> Package bind-license.noarch 32:9.9.4-72.el7 will be updated
+---> Package bind-license.noarch 32:9.9.4-73.el7_6 will be an update
+---> Package cronie.x86_64 0:1.4.11-19.el7 will be updated
+---> Package cronie.x86_64 0:1.4.11-20.el7_6 will be an update
+---> Package cronie-anacron.x86_64 0:1.4.11-19.el7 will be updated
+---> Package cronie-anacron.x86_64 0:1.4.11-20.el7_6 will be an update
+---> Package dbus.x86_64 1:1.10.24-12.el7 will be updated
+---> Package dbus.x86_64 1:1.10.24-13.el7_6 will be an update
+---> Package dbus-libs.x86_64 1:1.10.24-12.el7 will be updated
+---> Package dbus-libs.x86_64 1:1.10.24-13.el7_6 will be an update
+---> Package device-mapper.x86_64 7:1.02.149-8.el7 will be updated
+---> Package device-mapper.x86_64 7:1.02.149-10.el7_6.3 will be an update
+---> Package device-mapper-event.x86_64 7:1.02.149-8.el7 will be updated
+---> Package device-mapper-event.x86_64 7:1.02.149-10.el7_6.3 will be an update
+---> Package device-mapper-event-libs.x86_64 7:1.02.149-8.el7 will be updated
+---> Package device-mapper-event-libs.x86_64 7:1.02.149-10.el7_6.3 will be an update
+---> Package device-mapper-libs.x86_64 7:1.02.149-8.el7 will be updated
+---> Package device-mapper-libs.x86_64 7:1.02.149-10.el7_6.3 will be an update
+---> Package freetype.x86_64 0:2.8-12.el7 will be updated
+---> Package freetype.x86_64 0:2.8-12.el7_6.1 will be an update
+---> Package glibc.x86_64 0:2.17-260.el7 will be updated
+---> Package glibc.x86_64 0:2.17-260.el7_6.4 will be an update
+---> Package glibc-common.x86_64 0:2.17-260.el7 will be updated
+---> Package glibc-common.x86_64 0:2.17-260.el7_6.4 will be an update
+---> Package grub2.x86_64 1:2.02-0.76.el7.centos will be updated
+---> Package grub2.x86_64 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-common.noarch 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-common.noarch 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-pc.x86_64 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-pc.x86_64 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-pc-modules.noarch 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-pc-modules.noarch 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-tools.x86_64 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-tools.x86_64 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-tools-extra.x86_64 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-tools-extra.x86_64 1:2.02-0.76.el7.centos.1 will be an update
+---> Package grub2-tools-minimal.x86_64 1:2.02-0.76.el7.centos will be updated
+---> Package grub2-tools-minimal.x86_64 1:2.02-0.76.el7.centos.1 will be an update
+---> Package ipset.x86_64 0:6.38-2.el7 will be updated
+---> Package ipset.x86_64 0:6.38-3.el7_6 will be an update
+---> Package ipset-libs.x86_64 0:6.38-2.el7 will be updated
+---> Package ipset-libs.x86_64 0:6.38-3.el7_6 will be an update
+---> Package kernel.x86_64 0:3.10.0-957.10.1.el7 will be installed
+---> Package kernel-tools.x86_64 0:3.10.0-957.el7 will be updated
+---> Package kernel-tools.x86_64 0:3.10.0-957.10.1.el7 will be an update
+---> Package kernel-tools-libs.x86_64 0:3.10.0-957.el7 will be updated
+---> Package kernel-tools-libs.x86_64 0:3.10.0-957.10.1.el7 will be an update
+---> Package krb5-libs.x86_64 0:1.15.1-34.el7 will be updated
+---> Package krb5-libs.x86_64 0:1.15.1-37.el7_6 will be an update
+---> Package libblkid.x86_64 0:2.23.2-59.el7 will be updated
+---> Package libblkid.x86_64 0:2.23.2-59.el7_6.1 will be an update
+---> Package libgcc.x86_64 0:4.8.5-36.el7 will be updated
+---> Package libgcc.x86_64 0:4.8.5-36.el7_6.1 will be an update
+---> Package libgomp.x86_64 0:4.8.5-36.el7 will be updated
+---> Package libgomp.x86_64 0:4.8.5-36.el7_6.1 will be an update
+---> Package libmount.x86_64 0:2.23.2-59.el7 will be updated
+---> Package libmount.x86_64 0:2.23.2-59.el7_6.1 will be an update
+---> Package libsmartcols.x86_64 0:2.23.2-59.el7 will be updated
+---> Package libsmartcols.x86_64 0:2.23.2-59.el7_6.1 will be an update
+---> Package libssh2.x86_64 0:1.4.3-12.el7 will be updated
+---> Package libssh2.x86_64 0:1.4.3-12.el7_6.2 will be an update
+---> Package libstdc++.x86_64 0:4.8.5-36.el7 will be updated
+---> Package libstdc++.x86_64 0:4.8.5-36.el7_6.1 will be an update
+---> Package libuuid.x86_64 0:2.23.2-59.el7 will be updated
+---> Package libuuid.x86_64 0:2.23.2-59.el7_6.1 will be an update
+---> Package lvm2.x86_64 7:2.02.180-8.el7 will be updated
+---> Package lvm2.x86_64 7:2.02.180-10.el7_6.3 will be an update
+---> Package lvm2-libs.x86_64 7:2.02.180-8.el7 will be updated
+---> Package lvm2-libs.x86_64 7:2.02.180-10.el7_6.3 will be an update
+---> Package nss.x86_64 0:3.36.0-7.el7_5 will be updated
+---> Package nss.x86_64 0:3.36.0-7.1.el7_6 will be an update
+---> Package nss-pem.x86_64 0:1.0.3-5.el7 will be updated
+---> Package nss-pem.x86_64 0:1.0.3-5.el7_6.1 will be an update
+---> Package nss-sysinit.x86_64 0:3.36.0-7.el7_5 will be updated
+---> Package nss-sysinit.x86_64 0:3.36.0-7.1.el7_6 will be an update
+---> Package nss-tools.x86_64 0:3.36.0-7.el7_5 will be updated
+---> Package nss-tools.x86_64 0:3.36.0-7.1.el7_6 will be an update
+---> Package nss-util.x86_64 0:3.36.0-1.el7_5 will be updated
+---> Package nss-util.x86_64 0:3.36.0-1.1.el7_6 will be an update
+---> Package openldap.x86_64 0:2.4.44-20.el7 will be updated
+---> Package openldap.x86_64 0:2.4.44-21.el7_6 will be an update
+---> Package openssl.x86_64 1:1.0.2k-16.el7 will be updated
+---> Package openssl.x86_64 1:1.0.2k-16.el7_6.1 will be an update
+---> Package openssl-libs.x86_64 1:1.0.2k-16.el7 will be updated
+---> Package openssl-libs.x86_64 1:1.0.2k-16.el7_6.1 will be an update
+---> Package policycoreutils.x86_64 0:2.5-29.el7 will be updated
+---> Package policycoreutils.x86_64 0:2.5-29.el7_6.1 will be an update
+---> Package polkit.x86_64 0:0.112-18.el7 will be updated
+---> Package polkit.x86_64 0:0.112-18.el7_6.1 will be an update
+---> Package python.x86_64 0:2.7.5-76.el7 will be updated
+---> Package python.x86_64 0:2.7.5-77.el7_6 will be an update
+---> Package python-libs.x86_64 0:2.7.5-76.el7 will be updated
+---> Package python-libs.x86_64 0:2.7.5-77.el7_6 will be an update
+---> Package python-perf.x86_64 0:3.10.0-957.el7 will be updated
+---> Package python-perf.x86_64 0:3.10.0-957.10.1.el7 will be an update
+---> Package selinux-policy.noarch 0:3.13.1-229.el7 will be updated
+---> Package selinux-policy.noarch 0:3.13.1-229.el7_6.9 will be an update
+---> Package selinux-policy-targeted.noarch 0:3.13.1-229.el7 will be updated
+---> Package selinux-policy-targeted.noarch 0:3.13.1-229.el7_6.9 will be an update
+---> Package shadow-utils.x86_64 2:4.1.5.1-25.el7 will be updated
+---> Package shadow-utils.x86_64 2:4.1.5.1-25.el7_6.1 will be an update
+---> Package systemd.x86_64 0:219-62.el7 will be updated
+---> Package systemd.x86_64 0:219-62.el7_6.5 will be an update
+---> Package systemd-libs.x86_64 0:219-62.el7 will be updated
+---> Package systemd-libs.x86_64 0:219-62.el7_6.5 will be an update
+---> Package systemd-sysv.x86_64 0:219-62.el7 will be updated
+---> Package systemd-sysv.x86_64 0:219-62.el7_6.5 will be an update
+---> Package tuned.noarch 0:2.10.0-6.el7 will be updated
+---> Package tuned.noarch 0:2.10.0-6.el7_6.3 will be an update
+---> Package tzdata.noarch 0:2018e-3.el7 will be updated
+---> Package tzdata.noarch 0:2019a-1.el7 will be an update
+---> Package util-linux.x86_64 0:2.23.2-59.el7 will be updated
+---> Package util-linux.x86_64 0:2.23.2-59.el7_6.1 will be an update
+---> Package xfsprogs.x86_64 0:4.5.0-18.el7 will be updated
+---> Package xfsprogs.x86_64 0:4.5.0-19.el7_6 will be an update
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===================================================================================================================================
+ Package                                         Arch                          Version                                          Rep
+===================================================================================================================================
+Installing:
+ kernel                                          x86_64                        3.10.0-957.10.1.el7                              upd
+Updating:
+ NetworkManager                                  x86_64                        1:1.12.0-10.el7_6                                upd
+ NetworkManager-libnm                            x86_64                        1:1.12.0-10.el7_6                                upd
+ NetworkManager-team                             x86_64                        1:1.12.0-10.el7_6                                upd
+ NetworkManager-tui                              x86_64                        1:1.12.0-10.el7_6                                upd
+ NetworkManager-wifi                             x86_64                        1:1.12.0-10.el7_6                                upd
+ bind-libs-lite                                  x86_64                        32:9.9.4-73.el7_6                                upd
+ bind-license                                    noarch                        32:9.9.4-73.el7_6                                upd
+ cronie                                          x86_64                        1.4.11-20.el7_6                                  upd
+ cronie-anacron                                  x86_64                        1.4.11-20.el7_6                                  upd
+ dbus                                            x86_64                        1:1.10.24-13.el7_6                               upd
+ dbus-libs                                       x86_64                        1:1.10.24-13.el7_6                               upd
+ device-mapper                                   x86_64                        7:1.02.149-10.el7_6.3                            upd
+ device-mapper-event                             x86_64                        7:1.02.149-10.el7_6.3                            upd
+ device-mapper-event-libs                        x86_64                        7:1.02.149-10.el7_6.3                            upd
+ device-mapper-libs                              x86_64                        7:1.02.149-10.el7_6.3                            upd
+ freetype                                        x86_64                        2.8-12.el7_6.1                                   upd
+ glibc                                           x86_64                        2.17-260.el7_6.4                                 upd
+ glibc-common                                    x86_64                        2.17-260.el7_6.4                                 upd
+ grub2                                           x86_64                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-common                                    noarch                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-pc                                        x86_64                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-pc-modules                                noarch                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-tools                                     x86_64                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-tools-extra                               x86_64                        1:2.02-0.76.el7.centos.1                         upd
+ grub2-tools-minimal                             x86_64                        1:2.02-0.76.el7.centos.1                         upd
+ ipset                                           x86_64                        6.38-3.el7_6                                     upd
+ ipset-libs                                      x86_64                        6.38-3.el7_6                                     upd
+ kernel-tools                                    x86_64                        3.10.0-957.10.1.el7                              upd
+ kernel-tools-libs                               x86_64                        3.10.0-957.10.1.el7                              upd
+ krb5-libs                                       x86_64                        1.15.1-37.el7_6                                  upd
+ libblkid                                        x86_64                        2.23.2-59.el7_6.1                                upd
+ libgcc                                          x86_64                        4.8.5-36.el7_6.1                                 upd
+ libgomp                                         x86_64                        4.8.5-36.el7_6.1                                 upd
+ libmount                                        x86_64                        2.23.2-59.el7_6.1                                upd
+ libsmartcols                                    x86_64                        2.23.2-59.el7_6.1                                upd
+ libssh2                                         x86_64                        1.4.3-12.el7_6.2                                 upd
+ libstdc++                                       x86_64                        4.8.5-36.el7_6.1                                 upd
+ libuuid                                         x86_64                        2.23.2-59.el7_6.1                                upd
+ lvm2                                            x86_64                        7:2.02.180-10.el7_6.3                            upd
+ lvm2-libs                                       x86_64                        7:2.02.180-10.el7_6.3                            upd
+ nss                                             x86_64                        3.36.0-7.1.el7_6                                 upd
+ nss-pem                                         x86_64                        1.0.3-5.el7_6.1                                  upd
+ nss-sysinit                                     x86_64                        3.36.0-7.1.el7_6                                 upd
+ nss-tools                                       x86_64                        3.36.0-7.1.el7_6                                 upd
+ nss-util                                        x86_64                        3.36.0-1.1.el7_6                                 upd
+ openldap                                        x86_64                        2.4.44-21.el7_6                                  upd
+ openssl                                         x86_64                        1:1.0.2k-16.el7_6.1                              upd
+ openssl-libs                                    x86_64                        1:1.0.2k-16.el7_6.1                              upd
+ policycoreutils                                 x86_64                        2.5-29.el7_6.1                                   upd
+ polkit                                          x86_64                        0.112-18.el7_6.1                                 upd
+ python                                          x86_64                        2.7.5-77.el7_6                                   upd
+ python-libs                                     x86_64                        2.7.5-77.el7_6                                   upd
+ python-perf                                     x86_64                        3.10.0-957.10.1.el7                              upd
+ selinux-policy                                  noarch                        3.13.1-229.el7_6.9                               upd
+ selinux-policy-targeted                         noarch                        3.13.1-229.el7_6.9                               upd
+ shadow-utils                                    x86_64                        2:4.1.5.1-25.el7_6.1                             upd
+ systemd                                         x86_64                        219-62.el7_6.5                                   upd
+ systemd-libs                                    x86_64                        219-62.el7_6.5                                   upd
+ systemd-sysv                                    x86_64                        219-62.el7_6.5                                   upd
+ tuned                                           noarch                        2.10.0-6.el7_6.3                                 upd
+ tzdata                                          noarch                        2019a-1.el7                                      upd
+ util-linux                                      x86_64                        2.23.2-59.el7_6.1                                upd
+ xfsprogs                                        x86_64                        4.5.0-19.el7_6                                   upd
+
+Transaction Summary
+===================================================================================================================================
+Install   1 Package
+Upgrade  63 Packages
+
+Total download size: 128 M
+Downloading packages:
+Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+warning: /var/cache/yum/x86_64/7/updates/packages/NetworkManager-team-1.12.0-10.el7_6.x86_64.rpm: Header V3 RSA/SHA256 Signature, k
+Public key for NetworkManager-team-1.12.0-10.el7_6.x86_64.rpm is not installed
+(1/64): NetworkManager-team-1.12.0-10.el7_6.x86_64.rpm
+(2/64): NetworkManager-tui-1.12.0-10.el7_6.x86_64.rpm
+(3/64): NetworkManager-wifi-1.12.0-10.el7_6.x86_64.rpm
+(4/64): bind-license-9.9.4-73.el7_6.noarch.rpm
+(5/64): bind-libs-lite-9.9.4-73.el7_6.x86_64.rpm
+(6/64): cronie-anacron-1.4.11-20.el7_6.x86_64.rpm
+(7/64): dbus-1.10.24-13.el7_6.x86_64.rpm
+(8/64): dbus-libs-1.10.24-13.el7_6.x86_64.rpm
+(9/64): device-mapper-1.02.149-10.el7_6.3.x86_64.rpm
+(10/64): device-mapper-event-1.02.149-10.el7_6.3.x86_64.rpm
+(11/64): cronie-1.4.11-20.el7_6.x86_64.rpm
+(12/64): device-mapper-event-libs-1.02.149-10.el7_6.3.x86_64.rpm
+(13/64): device-mapper-libs-1.02.149-10.el7_6.3.x86_64.rpm
+(14/64): freetype-2.8-12.el7_6.1.x86_64.rpm
+(15/64): glibc-2.17-260.el7_6.4.x86_64.rpm
+(16/64): grub2-common-2.02-0.76.el7.centos.1.noarch.rpm
+(17/64): grub2-pc-2.02-0.76.el7.centos.1.x86_64.rpm
+(18/64): grub2-2.02-0.76.el7.centos.1.x86_64.rpm
+(19/64): grub2-pc-modules-2.02-0.76.el7.centos.1.noarch.rpm
+(20/64): glibc-common-2.17-260.el7_6.4.x86_64.rpm
+(21/64): grub2-tools-minimal-2.02-0.76.el7.centos.1.x86_64.rpm
+(22/64): ipset-6.38-3.el7_6.x86_64.rpm
+(23/64): ipset-libs-6.38-3.el7_6.x86_64.rpm
+(24/64): grub2-tools-extra-2.02-0.76.el7.centos.1.x86_64.rpm
+(25/64): grub2-tools-2.02-0.76.el7.centos.1.x86_64.rpm
+(26/64): NetworkManager-libnm-1.12.0-10.el7_6.x86_64.rpm
+(27/64): NetworkManager-1.12.0-10.el7_6.x86_64.rpm
+(28/64): libblkid-2.23.2-59.el7_6.1.x86_64.rpm
+(29/64): libgcc-4.8.5-36.el7_6.1.x86_64.rpm
+(30/64): libgomp-4.8.5-36.el7_6.1.x86_64.rpm
+(31/64): libmount-2.23.2-59.el7_6.1.x86_64.rpm
+(32/64): libsmartcols-2.23.2-59.el7_6.1.x86_64.rpm
+(33/64): libssh2-1.4.3-12.el7_6.2.x86_64.rpm
+(34/64): krb5-libs-1.15.1-37.el7_6.x86_64.rpm
+(35/64): libstdc++-4.8.5-36.el7_6.1.x86_64.rpm
+(36/64): libuuid-2.23.2-59.el7_6.1.x86_64.rpm
+(37/64): lvm2-2.02.180-10.el7_6.3.x86_64.rpm
+(38/64): nss-3.36.0-7.1.el7_6.x86_64.rpm
+(39/64): lvm2-libs-2.02.180-10.el7_6.3.x86_64.rpm
+(40/64): nss-pem-1.0.3-5.el7_6.1.x86_64.rpm
+(41/64): nss-tools-3.36.0-7.1.el7_6.x86_64.rpm
+(42/64): kernel-3.10.0-957.10.1.el7.x86_64.rpm
+(43/64): nss-util-3.36.0-1.1.el7_6.x86_64.rpm
+(44/64): openldap-2.4.44-21.el7_6.x86_64.rpm
+(45/64): openssl-1.0.2k-16.el7_6.1.x86_64.rpm
+(46/64): nss-sysinit-3.36.0-7.1.el7_6.x86_64.rpm
+(47/64): openssl-libs-1.0.2k-16.el7_6.1.x86_64.rpm
+(48/64): policycoreutils-2.5-29.el7_6.1.x86_64.rpm
+(49/64): python-2.7.5-77.el7_6.x86_64.rpm
+(50/64): polkit-0.112-18.el7_6.1.x86_64.rpm
+(51/64): selinux-policy-3.13.1-229.el7_6.9.noarch.rpm
+(52/64): python-perf-3.10.0-957.10.1.el7.x86_64.rpm
+(53/64): python-libs-2.7.5-77.el7_6.x86_64.rpm
+(54/64): shadow-utils-4.1.5.1-25.el7_6.1.x86_64.rpm
+(55/64): systemd-libs-219-62.el7_6.5.x86_64.rpm
+(56/64): systemd-sysv-219-62.el7_6.5.x86_64.rpm
+(57/64): systemd-219-62.el7_6.5.x86_64.rpm
+(58/64): tuned-2.10.0-6.el7_6.3.noarch.rpm
+(59/64): tzdata-2019a-1.el7.noarch.rpm
+(60/64): xfsprogs-4.5.0-19.el7_6.x86_64.rpm
+(61/64): util-linux-2.23.2-59.el7_6.1.x86_64.rpm
+(62/64): kernel-tools-3.10.0-957.10.1.el7.x86_64.rpm
+(63/64): selinux-policy-targeted-3.13.1-229.el7_6.9.noarch.rpm
+(64/64): kernel-tools-libs-3.10.0-957.10.1.el7.x86_64.rpm
+-----------------------------------------------------------------------------------------------------------------------------------
+Total
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Importing GPG key 0xF4A80EB5:
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+ Package    : centos-release-7-6.1810.2.el7.centos.x86_64 (@anaconda)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Updating   : libgcc-4.8.5-36.el7_6.1.x86_64
+  Updating   : 1:grub2-common-2.02-0.76.el7.centos.1.noarch
+  Updating   : 1:grub2-pc-modules-2.02-0.76.el7.centos.1.noarch
+  Updating   : 32:bind-license-9.9.4-73.el7_6.noarch
+  Updating   : tzdata-2019a-1.el7.noarch
+  Updating   : glibc-common-2.17-260.el7_6.4.x86_64
+  Updating   : glibc-2.17-260.el7_6.4.x86_64
+  Updating   : systemd-libs-219-62.el7_6.5.x86_64
+  Updating   : nss-util-3.36.0-1.1.el7_6.x86_64
+  Updating   : libuuid-2.23.2-59.el7_6.1.x86_64
+  Updating   : libblkid-2.23.2-59.el7_6.1.x86_64
+  Updating   : krb5-libs-1.15.1-37.el7_6.x86_64
+  Updating   : 1:openssl-libs-1.0.2k-16.el7_6.1.x86_64
+  Updating   : 2:shadow-utils-4.1.5.1-25.el7_6.1.x86_64
+  Updating   : python-libs-2.7.5-77.el7_6.x86_64
+  Updating   : python-2.7.5-77.el7_6.x86_64
+  Updating   : libmount-2.23.2-59.el7_6.1.x86_64
+  Updating   : python-perf-3.10.0-957.10.1.el7.x86_64
+  Updating   : nss-sysinit-3.36.0-7.1.el7_6.x86_64
+  Updating   : nss-3.36.0-7.1.el7_6.x86_64
+  Updating   : nss-pem-1.0.3-5.el7_6.1.x86_64
+  Updating   : 1:NetworkManager-libnm-1.12.0-10.el7_6.x86_64
+  Updating   : nss-tools-3.36.0-7.1.el7_6.x86_64
+  Updating   : 1:dbus-libs-1.10.24-13.el7_6.x86_64
+  Updating   : systemd-219-62.el7_6.5.x86_64
+  Updating   : 1:dbus-1.10.24-13.el7_6.x86_64
+  Updating   : polkit-0.112-18.el7_6.1.x86_64
+  Updating   : 1:NetworkManager-1.12.0-10.el7_6.x86_64
+  Updating   : cronie-anacron-1.4.11-20.el7_6.x86_64
+  Updating   : cronie-1.4.11-20.el7_6.x86_64
+  Updating   : ipset-libs-6.38-3.el7_6.x86_64
+  Updating   : libsmartcols-2.23.2-59.el7_6.1.x86_64
+  Updating   : util-linux-2.23.2-59.el7_6.1.x86_64
+  Updating   : policycoreutils-2.5-29.el7_6.1.x86_64
+  Updating   : 7:device-mapper-libs-1.02.149-10.el7_6.3.x86_64
+  Updating   : 7:device-mapper-1.02.149-10.el7_6.3.x86_64
+  Updating   : 7:device-mapper-event-libs-1.02.149-10.el7_6.3.x86_64
+  Updating   : 1:grub2-tools-minimal-2.02-0.76.el7.centos.1.x86_64
+  Updating   : 1:grub2-tools-2.02-0.76.el7.centos.1.x86_64
+  Updating   : 7:device-mapper-event-1.02.149-10.el7_6.3.x86_64
+  Updating   : 7:lvm2-libs-2.02.180-10.el7_6.3.x86_64
+  Updating   : selinux-policy-3.13.1-229.el7_6.9.noarch
+  Updating   : freetype-2.8-12.el7_6.1.x86_64
+  Updating   : 1:grub2-tools-extra-2.02-0.76.el7.centos.1.x86_64
+  Updating   : 1:grub2-pc-2.02-0.76.el7.centos.1.x86_64
+  Updating   : kernel-tools-libs-3.10.0-957.10.1.el7.x86_64
+  Updating   : kernel-tools-3.10.0-957.10.1.el7.x86_64
+  Updating   : 1:grub2-2.02-0.76.el7.centos.1.x86_64
+  Updating   : selinux-policy-targeted-3.13.1-229.el7_6.9.noarch
+  Updating   : 7:lvm2-2.02.180-10.el7_6.3.x86_64
+  Updating   : tuned-2.10.0-6.el7_6.3.noarch
+  Updating   : ipset-6.38-3.el7_6.x86_64
+  Updating   : 1:NetworkManager-tui-1.12.0-10.el7_6.x86_64
+  Updating   : 1:NetworkManager-team-1.12.0-10.el7_6.x86_64
+  Updating   : 1:NetworkManager-wifi-1.12.0-10.el7_6.x86_64
+  Updating   : systemd-sysv-219-62.el7_6.5.x86_64
+  Updating   : openldap-2.4.44-21.el7_6.x86_64
+  Updating   : 1:openssl-1.0.2k-16.el7_6.1.x86_64
+  Updating   : libssh2-1.4.3-12.el7_6.2.x86_64
+  Updating   : 32:bind-libs-lite-9.9.4-73.el7_6.x86_64
+  Updating   : xfsprogs-4.5.0-19.el7_6.x86_64
+  Updating   : libgomp-4.8.5-36.el7_6.1.x86_64
+  Updating   : libstdc++-4.8.5-36.el7_6.1.x86_64
+  Installing : kernel-3.10.0-957.10.1.el7.x86_64
+  Cleanup    : tuned-2.10.0-6.el7.noarch
+  Cleanup    : 1:NetworkManager-tui-1.12.0-6.el7.x86_64
+  Cleanup    : 7:lvm2-2.02.180-8.el7.x86_64
+  Cleanup    : openldap-2.4.44-20.el7.x86_64
+  Cleanup    : 7:lvm2-libs-2.02.180-8.el7.x86_64
+  Cleanup    : 7:device-mapper-event-1.02.149-8.el7.x86_64
+  Cleanup    : 32:bind-libs-lite-9.9.4-72.el7.x86_64
+  Cleanup    : nss-tools-3.36.0-7.el7_5.x86_64
+  Cleanup    : 1:openssl-1.0.2k-16.el7.x86_64
+  Cleanup    : xfsprogs-4.5.0-18.el7.x86_64
+  Cleanup    : python-perf-3.10.0-957.el7.x86_64
+  Cleanup    : ipset-6.38-2.el7.x86_64
+  Cleanup    : 1:NetworkManager-wifi-1.12.0-6.el7.x86_64
+  Cleanup    : 1:NetworkManager-team-1.12.0-6.el7.x86_64
+  Cleanup    : 1:NetworkManager-1.12.0-6.el7.x86_64
+  Cleanup    : 1:NetworkManager-libnm-1.12.0-6.el7.x86_64
+  Cleanup    : nss-sysinit-3.36.0-7.el7_5.x86_64
+  Cleanup    : nss-3.36.0-7.el7_5.x86_64
+  Cleanup    : nss-pem-1.0.3-5.el7.x86_64
+  Cleanup    : polkit-0.112-18.el7.x86_64
+  Cleanup    : kernel-tools-3.10.0-957.el7.x86_64
+  Cleanup    : systemd-sysv-219-62.el7.x86_64
+  Cleanup    : selinux-policy-targeted-3.13.1-229.el7.noarch
+  Cleanup    : python-2.7.5-76.el7.x86_64
+  Cleanup    : python-libs-2.7.5-76.el7.x86_64
+  Cleanup    : 7:device-mapper-event-libs-1.02.149-8.el7.x86_64
+  Cleanup    : libstdc++-4.8.5-36.el7.x86_64
+  Cleanup    : libssh2-1.4.3-12.el7.x86_64
+  Cleanup    : selinux-policy-3.13.1-229.el7.noarch
+  Cleanup    : 1:grub2-2.02-0.76.el7.centos.x86_64
+  Cleanup    : 1:grub2-pc-2.02-0.76.el7.centos.x86_64
+  Cleanup    : 1:grub2-tools-extra-2.02-0.76.el7.centos.x86_64
+  Cleanup    : 1:grub2-tools-2.02-0.76.el7.centos.x86_64
+  Cleanup    : 1:grub2-tools-minimal-2.02-0.76.el7.centos.x86_64
+  Cleanup    : 7:device-mapper-1.02.149-8.el7.x86_64
+  Cleanup    : 7:device-mapper-libs-1.02.149-8.el7.x86_64
+  Cleanup    : krb5-libs-1.15.1-34.el7.x86_64
+  Cleanup    : 1:openssl-libs-1.0.2k-16.el7.x86_64
+  Cleanup    : policycoreutils-2.5-29.el7.x86_64
+  Cleanup    : util-linux-2.23.2-59.el7.x86_64
+  Cleanup    : cronie-1.4.11-19.el7.x86_64
+  Cleanup    : cronie-anacron-1.4.11-19.el7.x86_64
+  Cleanup    : 1:grub2-pc-modules-2.02-0.76.el7.centos.noarch
+  Cleanup    : 1:dbus-1.10.24-12.el7.x86_64
+  Cleanup    : systemd-219-62.el7.x86_64
+  Cleanup    : libmount-2.23.2-59.el7.x86_64
+  Cleanup    : libblkid-2.23.2-59.el7.x86_64
+  Cleanup    : 1:dbus-libs-1.10.24-12.el7.x86_64
+  Cleanup    : systemd-libs-219-62.el7.x86_64
+  Cleanup    : libuuid-2.23.2-59.el7.x86_64
+  Cleanup    : 2:shadow-utils-4.1.5.1-25.el7.x86_64
+  Cleanup    : libsmartcols-2.23.2-59.el7.x86_64
+  Cleanup    : freetype-2.8-12.el7.x86_64
+  Cleanup    : kernel-tools-libs-3.10.0-957.el7.x86_64
+  Cleanup    : nss-util-3.36.0-1.el7_5.x86_64
+  Cleanup    : ipset-libs-6.38-2.el7.x86_64
+  Cleanup    : libgomp-4.8.5-36.el7.x86_64
+  Cleanup    : 1:grub2-common-2.02-0.76.el7.centos.noarch
+  Cleanup    : 32:bind-license-9.9.4-72.el7.noarch
+  Cleanup    : glibc-common-2.17-260.el7.x86_64
+  Cleanup    : glibc-2.17-260.el7.x86_64
+  Cleanup    : tzdata-2018e-3.el7.noarch
+  Cleanup    : libgcc-4.8.5-36.el7.x86_64
+  Verifying  : nss-pem-1.0.3-5.el7_6.1.x86_64
+  Verifying  : libblkid-2.23.2-59.el7_6.1.x86_64
+  Verifying  : nss-sysinit-3.36.0-7.1.el7_6.x86_64
+  Verifying  : 1:grub2-common-2.02-0.76.el7.centos.1.noarch
+  Verifying  : tuned-2.10.0-6.el7_6.3.noarch
+  Verifying  : 7:device-mapper-libs-1.02.149-10.el7_6.3.x86_64
+  Verifying  : kernel-3.10.0-957.10.1.el7.x86_64
+  Verifying  : kernel-tools-3.10.0-957.10.1.el7.x86_64
+  Verifying  : ipset-libs-6.38-3.el7_6.x86_64
+  Verifying  : 1:NetworkManager-tui-1.12.0-10.el7_6.x86_64
+  Verifying  : selinux-policy-3.13.1-229.el7_6.9.noarch
+  Verifying  : 1:NetworkManager-libnm-1.12.0-10.el7_6.x86_64
+  Verifying  : selinux-policy-targeted-3.13.1-229.el7_6.9.noarch
+  Verifying  : 1:openssl-libs-1.0.2k-16.el7_6.1.x86_64
+  Verifying  : cronie-anacron-1.4.11-20.el7_6.x86_64
+  Verifying  : libgomp-4.8.5-36.el7_6.1.x86_64
+  Verifying  : 1:NetworkManager-team-1.12.0-10.el7_6.x86_64
+  Verifying  : 1:grub2-pc-2.02-0.76.el7.centos.1.x86_64
+  Verifying  : nss-tools-3.36.0-7.1.el7_6.x86_64
+  Verifying  : libmount-2.23.2-59.el7_6.1.x86_64
+  Verifying  : krb5-libs-1.15.1-37.el7_6.x86_64
+  Verifying  : 2:shadow-utils-4.1.5.1-25.el7_6.1.x86_64
+  Verifying  : systemd-libs-219-62.el7_6.5.x86_64
+  Verifying  : nss-3.36.0-7.1.el7_6.x86_64
+  Verifying  : 1:openssl-1.0.2k-16.el7_6.1.x86_64
+  Verifying  : 1:grub2-tools-2.02-0.76.el7.centos.1.x86_64
+  Verifying  : 7:device-mapper-event-libs-1.02.149-10.el7_6.3.x86_64
+  Verifying  : python-perf-3.10.0-957.10.1.el7.x86_64
+  Verifying  : 7:device-mapper-event-1.02.149-10.el7_6.3.x86_64
+  Verifying  : systemd-sysv-219-62.el7_6.5.x86_64
+  Verifying  : cronie-1.4.11-20.el7_6.x86_64
+  Verifying  : python-libs-2.7.5-77.el7_6.x86_64
+  Verifying  : openldap-2.4.44-21.el7_6.x86_64
+  Verifying  : libssh2-1.4.3-12.el7_6.2.x86_64
+  Verifying  : 1:grub2-2.02-0.76.el7.centos.1.x86_64
+  Verifying  : libgcc-4.8.5-36.el7_6.1.x86_64
+  Verifying  : policycoreutils-2.5-29.el7_6.1.x86_64
+  Verifying  : tzdata-2019a-1.el7.noarch
+  Verifying  : 1:NetworkManager-wifi-1.12.0-10.el7_6.x86_64
+  Verifying  : 7:lvm2-2.02.180-10.el7_6.3.x86_64
+  Verifying  : systemd-219-62.el7_6.5.x86_64
+  Verifying  : 1:dbus-libs-1.10.24-13.el7_6.x86_64
+  Verifying  : 1:dbus-1.10.24-13.el7_6.x86_64
+  Verifying  : python-2.7.5-77.el7_6.x86_64
+  Verifying  : libsmartcols-2.23.2-59.el7_6.1.x86_64
+  Verifying  : libuuid-2.23.2-59.el7_6.1.x86_64
+  Verifying  : glibc-common-2.17-260.el7_6.4.x86_64
+  Verifying  : 1:grub2-tools-minimal-2.02-0.76.el7.centos.1.x86_64
+  Verifying  : freetype-2.8-12.el7_6.1.x86_64
+  Verifying  : kernel-tools-libs-3.10.0-957.10.1.el7.x86_64
+  Verifying  : 7:device-mapper-1.02.149-10.el7_6.3.x86_64
+  Verifying  : 1:grub2-tools-extra-2.02-0.76.el7.centos.1.x86_64
+  Verifying  : glibc-2.17-260.el7_6.4.x86_64
+  Verifying  : 32:bind-license-9.9.4-73.el7_6.noarch
+  Verifying  : util-linux-2.23.2-59.el7_6.1.x86_64
+  Verifying  : nss-util-3.36.0-1.1.el7_6.x86_64
+  Verifying  : 32:bind-libs-lite-9.9.4-73.el7_6.x86_64
+  Verifying  : polkit-0.112-18.el7_6.1.x86_64
+  Verifying  : libstdc++-4.8.5-36.el7_6.1.x86_64
+  Verifying  : 1:NetworkManager-1.12.0-10.el7_6.x86_64
+  Verifying  : 7:lvm2-libs-2.02.180-10.el7_6.3.x86_64
+  Verifying  : xfsprogs-4.5.0-19.el7_6.x86_64
+  Verifying  : 1:grub2-pc-modules-2.02-0.76.el7.centos.1.noarch
+  Verifying  : ipset-6.38-3.el7_6.x86_64
+  Verifying  : python-2.7.5-76.el7.x86_64
+  Verifying  : 1:NetworkManager-1.12.0-6.el7.x86_64
+  Verifying  : 7:device-mapper-event-1.02.149-8.el7.x86_64
+  Verifying  : 1:grub2-pc-2.02-0.76.el7.centos.x86_64
+  Verifying  : 1:grub2-pc-modules-2.02-0.76.el7.centos.noarch
+  Verifying  : 1:NetworkManager-team-1.12.0-6.el7.x86_64
+  Verifying  : libgcc-4.8.5-36.el7.x86_64
+  Verifying  : libstdc++-4.8.5-36.el7.x86_64
+  Verifying  : freetype-2.8-12.el7.x86_64
+  Verifying  : libsmartcols-2.23.2-59.el7.x86_64
+  Verifying  : 2:shadow-utils-4.1.5.1-25.el7.x86_64
+  Verifying  : libgomp-4.8.5-36.el7.x86_64
+  Verifying  : nss-sysinit-3.36.0-7.el7_5.x86_64
+  Verifying  : 1:NetworkManager-wifi-1.12.0-6.el7.x86_64
+  Verifying  : krb5-libs-1.15.1-34.el7.x86_64
+  Verifying  : cronie-anacron-1.4.11-19.el7.x86_64
+  Verifying  : 7:device-mapper-libs-1.02.149-8.el7.x86_64
+  Verifying  : 7:device-mapper-event-libs-1.02.149-8.el7.x86_64
+  Verifying  : ipset-6.38-2.el7.x86_64
+  Verifying  : kernel-tools-libs-3.10.0-957.el7.x86_64
+  Verifying  : nss-util-3.36.0-1.el7_5.x86_64
+  Verifying  : 7:lvm2-libs-2.02.180-8.el7.x86_64
+  Verifying  : libuuid-2.23.2-59.el7.x86_64
+  Verifying  : systemd-219-62.el7.x86_64
+  Verifying  : nss-tools-3.36.0-7.el7_5.x86_64
+  Verifying  : 1:grub2-tools-2.02-0.76.el7.centos.x86_64
+  Verifying  : util-linux-2.23.2-59.el7.x86_64
+  Verifying  : 1:NetworkManager-tui-1.12.0-6.el7.x86_64
+  Verifying  : 1:dbus-1.10.24-12.el7.x86_64
+  Verifying  : 1:grub2-2.02-0.76.el7.centos.x86_64
+  Verifying  : 1:grub2-common-2.02-0.76.el7.centos.noarch
+  Verifying  : libblkid-2.23.2-59.el7.x86_64
+  Verifying  : 1:grub2-tools-extra-2.02-0.76.el7.centos.x86_64
+  Verifying  : 1:grub2-tools-minimal-2.02-0.76.el7.centos.x86_64
+  Verifying  : openldap-2.4.44-20.el7.x86_64
+  Verifying  : glibc-2.17-260.el7.x86_64
+  Verifying  : 7:device-mapper-1.02.149-8.el7.x86_64
+  Verifying  : selinux-policy-3.13.1-229.el7.noarch
+  Verifying  : 32:bind-libs-lite-9.9.4-72.el7.x86_64
+  Verifying  : kernel-tools-3.10.0-957.el7.x86_64
+  Verifying  : 1:openssl-1.0.2k-16.el7.x86_64
+  Verifying  : 1:dbus-libs-1.10.24-12.el7.x86_64
+  Verifying  : libmount-2.23.2-59.el7.x86_64
+  Verifying  : python-libs-2.7.5-76.el7.x86_64
+  Verifying  : 32:bind-license-9.9.4-72.el7.noarch
+  Verifying  : tuned-2.10.0-6.el7.noarch
+  Verifying  : systemd-sysv-219-62.el7.x86_64
+  Verifying  : python-perf-3.10.0-957.el7.x86_64
+  Verifying  : policycoreutils-2.5-29.el7.x86_64
+  Verifying  : nss-3.36.0-7.el7_5.x86_64
+  Verifying  : 1:openssl-libs-1.0.2k-16.el7.x86_64
+  Verifying  : systemd-libs-219-62.el7.x86_64
+  Verifying  : xfsprogs-4.5.0-18.el7.x86_64
+  Verifying  : nss-pem-1.0.3-5.el7.x86_64
+  Verifying  : libssh2-1.4.3-12.el7.x86_64
+  Verifying  : selinux-policy-targeted-3.13.1-229.el7.noarch
+  Verifying  : 7:lvm2-2.02.180-8.el7.x86_64
+  Verifying  : glibc-common-2.17-260.el7.x86_64
+  Verifying  : tzdata-2018e-3.el7.noarch
+  Verifying  : 1:NetworkManager-libnm-1.12.0-6.el7.x86_64
+  Verifying  : polkit-0.112-18.el7.x86_64
+  Verifying  : cronie-1.4.11-19.el7.x86_64
+  Verifying  : ipset-libs-6.38-2.el7.x86_64
+
+Installed:
+  kernel.x86_64 0:3.10.0-957.10.1.el7
+
+Updated:
+  NetworkManager.x86_64 1:1.12.0-10.el7_6               NetworkManager-libnm.x86_64 1:1.12.0-10.el7_6           NetworkManager-team
+  NetworkManager-tui.x86_64 1:1.12.0-10.el7_6           NetworkManager-wifi.x86_64 1:1.12.0-10.el7_6            bind-libs-lite.x86_
+  bind-license.noarch 32:9.9.4-73.el7_6                 cronie.x86_64 0:1.4.11-20.el7_6                         cronie-anacron.x86_
+  dbus.x86_64 1:1.10.24-13.el7_6                        dbus-libs.x86_64 1:1.10.24-13.el7_6                     device-mapper.x86_6
+  device-mapper-event.x86_64 7:1.02.149-10.el7_6.3      device-mapper-event-libs.x86_64 7:1.02.149-10.el7_6.3   device-mapper-libs.
+  freetype.x86_64 0:2.8-12.el7_6.1                      glibc.x86_64 0:2.17-260.el7_6.4                         glibc-common.x86_64
+  grub2.x86_64 1:2.02-0.76.el7.centos.1                 grub2-common.noarch 1:2.02-0.76.el7.centos.1            grub2-pc.x86_64 1:2
+  grub2-pc-modules.noarch 1:2.02-0.76.el7.centos.1      grub2-tools.x86_64 1:2.02-0.76.el7.centos.1             grub2-tools-extra.x
+  grub2-tools-minimal.x86_64 1:2.02-0.76.el7.centos.1   ipset.x86_64 0:6.38-3.el7_6                             ipset-libs.x86_64 0
+  kernel-tools.x86_64 0:3.10.0-957.10.1.el7             kernel-tools-libs.x86_64 0:3.10.0-957.10.1.el7          krb5-libs.x86_64 0:
+  libblkid.x86_64 0:2.23.2-59.el7_6.1                   libgcc.x86_64 0:4.8.5-36.el7_6.1                        libgomp.x86_64 0:4.
+  libmount.x86_64 0:2.23.2-59.el7_6.1                   libsmartcols.x86_64 0:2.23.2-59.el7_6.1                 libssh2.x86_64 0:1.
+  libstdc++.x86_64 0:4.8.5-36.el7_6.1                   libuuid.x86_64 0:2.23.2-59.el7_6.1                      lvm2.x86_64 7:2.02.
+  lvm2-libs.x86_64 7:2.02.180-10.el7_6.3                nss.x86_64 0:3.36.0-7.1.el7_6                           nss-pem.x86_64 0:1.
+  nss-sysinit.x86_64 0:3.36.0-7.1.el7_6                 nss-tools.x86_64 0:3.36.0-7.1.el7_6                     nss-util.x86_64 0:3
+  openldap.x86_64 0:2.4.44-21.el7_6                     openssl.x86_64 1:1.0.2k-16.el7_6.1                      openssl-libs.x86_64
+  policycoreutils.x86_64 0:2.5-29.el7_6.1               polkit.x86_64 0:0.112-18.el7_6.1                        python.x86_64 0:2.7
+  python-libs.x86_64 0:2.7.5-77.el7_6                   python-perf.x86_64 0:3.10.0-957.10.1.el7                selinux-policy.noar
+  selinux-policy-targeted.noarch 0:3.13.1-229.el7_6.9   shadow-utils.x86_64 2:4.1.5.1-25.el7_6.1                systemd.x86_64 0:21
+  systemd-libs.x86_64 0:219-62.el7_6.5                  systemd-sysv.x86_64 0:219-62.el7_6.5                    tuned.noarch 0:2.10
+  tzdata.noarch 0:2019a-1.el7                           util-linux.x86_64 0:2.23.2-59.el7_6.1                   xfsprogs.x86_64 0:4
+
+Complete!
+[root@knode ~]# yum install -y docker kubeadm kubelet kubectl --disableexcludes=kubernetes
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: ftp.iitm.ac.in
+ * extras: centos.mirrors.estointernet.in
+ * updates: centos.mirrors.estointernet.in
+Resolving Dependencies
+--> Running transaction check
+---> Package docker.x86_64 2:1.13.1-94.gitb2f74b2.el7.centos will be installed
+--> Processing Dependency: docker-common = 2:1.13.1-94.gitb2f74b2.el7.centos for package: 2:docker-1.13.1-94.gitb2f74b2.el7.centos.
+--> Processing Dependency: docker-client = 2:1.13.1-94.gitb2f74b2.el7.centos for package: 2:docker-1.13.1-94.gitb2f74b2.el7.centos.
+--> Processing Dependency: subscription-manager-rhsm-certificates for package: 2:docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+---> Package kubeadm.x86_64 0:1.14.1-0 will be installed
+--> Processing Dependency: kubernetes-cni >= 0.7.5 for package: kubeadm-1.14.1-0.x86_64
+--> Processing Dependency: cri-tools >= 1.11.0 for package: kubeadm-1.14.1-0.x86_64
+---> Package kubectl.x86_64 0:1.14.1-0 will be installed
+---> Package kubelet.x86_64 0:1.14.1-0 will be installed
+--> Processing Dependency: socat for package: kubelet-1.14.1-0.x86_64
+--> Processing Dependency: conntrack for package: kubelet-1.14.1-0.x86_64
+--> Running transaction check
+---> Package conntrack-tools.x86_64 0:1.4.4-4.el7 will be installed
+--> Processing Dependency: libnetfilter_cttimeout.so.1(LIBNETFILTER_CTTIMEOUT_1.1)(64bit) for package: conntrack-tools-1.4.4-4.el7.
+--> Processing Dependency: libnetfilter_cttimeout.so.1(LIBNETFILTER_CTTIMEOUT_1.0)(64bit) for package: conntrack-tools-1.4.4-4.el7.
+--> Processing Dependency: libnetfilter_cthelper.so.0(LIBNETFILTER_CTHELPER_1.0)(64bit) for package: conntrack-tools-1.4.4-4.el7.x8
+--> Processing Dependency: libnetfilter_queue.so.1()(64bit) for package: conntrack-tools-1.4.4-4.el7.x86_64
+--> Processing Dependency: libnetfilter_cttimeout.so.1()(64bit) for package: conntrack-tools-1.4.4-4.el7.x86_64
+--> Processing Dependency: libnetfilter_cthelper.so.0()(64bit) for package: conntrack-tools-1.4.4-4.el7.x86_64
+---> Package cri-tools.x86_64 0:1.12.0-0 will be installed
+---> Package docker-client.x86_64 2:1.13.1-94.gitb2f74b2.el7.centos will be installed
+---> Package docker-common.x86_64 2:1.13.1-94.gitb2f74b2.el7.centos will be installed
+--> Processing Dependency: skopeo-containers >= 1:0.1.26-2 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: oci-umount >= 2:2.3.3-3 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: oci-systemd-hook >= 1:0.1.4-9 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: oci-register-machine >= 1:0-5.13 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: container-storage-setup >= 0.9.0-1 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: container-selinux >= 2:2.51-1 for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+--> Processing Dependency: atomic-registries for package: 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+---> Package kubernetes-cni.x86_64 0:0.7.5-0 will be installed
+---> Package socat.x86_64 0:1.7.3.2-2.el7 will be installed
+---> Package subscription-manager-rhsm-certificates.x86_64 0:1.21.10-3.el7.centos will be installed
+--> Running transaction check
+---> Package atomic-registries.x86_64 1:1.22.1-26.gitb507039.el7.centos will be installed
+--> Processing Dependency: python-yaml for package: 1:atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64
+--> Processing Dependency: python-setuptools for package: 1:atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64
+--> Processing Dependency: python-pytoml for package: 1:atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64
+---> Package container-selinux.noarch 2:2.74-1.el7 will be installed
+--> Processing Dependency: policycoreutils-python for package: 2:container-selinux-2.74-1.el7.noarch
+---> Package container-storage-setup.noarch 0:0.11.0-2.git5eaf76c.el7 will be installed
+---> Package containers-common.x86_64 1:0.1.31-8.gitb0b750d.el7.centos will be installed
+---> Package libnetfilter_cthelper.x86_64 0:1.0.0-9.el7 will be installed
+---> Package libnetfilter_cttimeout.x86_64 0:1.0.0-6.el7 will be installed
+---> Package libnetfilter_queue.x86_64 0:1.0.2-2.el7_2 will be installed
+---> Package oci-register-machine.x86_64 1:0-6.git2b44233.el7 will be installed
+---> Package oci-systemd-hook.x86_64 1:0.1.18-3.git8787307.el7_6 will be installed
+--> Processing Dependency: libyajl.so.2()(64bit) for package: 1:oci-systemd-hook-0.1.18-3.git8787307.el7_6.x86_64
+---> Package oci-umount.x86_64 2:2.3.4-2.git87f9237.el7 will be installed
+--> Running transaction check
+---> Package PyYAML.x86_64 0:3.10-11.el7 will be installed
+--> Processing Dependency: libyaml-0.so.2()(64bit) for package: PyYAML-3.10-11.el7.x86_64
+---> Package policycoreutils-python.x86_64 0:2.5-29.el7_6.1 will be installed
+--> Processing Dependency: setools-libs >= 3.3.8-4 for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libsemanage-python >= 2.5-14 for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: audit-libs-python >= 2.1.3-4 for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: python-IPy for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libqpol.so.1(VERS_1.4)(64bit) for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libqpol.so.1(VERS_1.2)(64bit) for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libcgroup for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libapol.so.4(VERS_4.0)(64bit) for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: checkpolicy for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libqpol.so.1()(64bit) for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+--> Processing Dependency: libapol.so.4()(64bit) for package: policycoreutils-python-2.5-29.el7_6.1.x86_64
+---> Package python-pytoml.noarch 0:0.1.14-1.git7dea353.el7 will be installed
+---> Package python-setuptools.noarch 0:0.9.8-7.el7 will be installed
+--> Processing Dependency: python-backports-ssl_match_hostname for package: python-setuptools-0.9.8-7.el7.noarch
+---> Package yajl.x86_64 0:2.0.4-4.el7 will be installed
+--> Running transaction check
+---> Package audit-libs-python.x86_64 0:2.8.4-4.el7 will be installed
+---> Package checkpolicy.x86_64 0:2.5-8.el7 will be installed
+---> Package libcgroup.x86_64 0:0.41-20.el7 will be installed
+---> Package libsemanage-python.x86_64 0:2.5-14.el7 will be installed
+---> Package libyaml.x86_64 0:0.1.4-11.el7_0 will be installed
+---> Package python-IPy.noarch 0:0.75-6.el7 will be installed
+---> Package python-backports-ssl_match_hostname.noarch 0:3.5.0.1-1.el7 will be installed
+--> Processing Dependency: python-ipaddress for package: python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch
+--> Processing Dependency: python-backports for package: python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch
+---> Package setools-libs.x86_64 0:3.3.8-4.el7 will be installed
+--> Running transaction check
+---> Package python-backports.x86_64 0:1.0-8.el7 will be installed
+---> Package python-ipaddress.noarch 0:1.0.16-2.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===================================================================================================================================
+ Package                                                Arch                   Version
+===================================================================================================================================
+Installing:
+ docker                                                 x86_64                 2:1.13.1-94.gitb2f74b2.el7.centos
+ kubeadm                                                x86_64                 1.14.1-0
+ kubectl                                                x86_64                 1.14.1-0
+ kubelet                                                x86_64                 1.14.1-0
+Installing for dependencies:
+ PyYAML                                                 x86_64                 3.10-11.el7
+ atomic-registries                                      x86_64                 1:1.22.1-26.gitb507039.el7.centos
+ audit-libs-python                                      x86_64                 2.8.4-4.el7
+ checkpolicy                                            x86_64                 2.5-8.el7
+ conntrack-tools                                        x86_64                 1.4.4-4.el7
+ container-selinux                                      noarch                 2:2.74-1.el7
+ container-storage-setup                                noarch                 0.11.0-2.git5eaf76c.el7
+ containers-common                                      x86_64                 1:0.1.31-8.gitb0b750d.el7.centos
+ cri-tools                                              x86_64                 1.12.0-0
+ docker-client                                          x86_64                 2:1.13.1-94.gitb2f74b2.el7.centos
+ docker-common                                          x86_64                 2:1.13.1-94.gitb2f74b2.el7.centos
+ kubernetes-cni                                         x86_64                 0.7.5-0
+ libcgroup                                              x86_64                 0.41-20.el7
+ libnetfilter_cthelper                                  x86_64                 1.0.0-9.el7
+ libnetfilter_cttimeout                                 x86_64                 1.0.0-6.el7
+ libnetfilter_queue                                     x86_64                 1.0.2-2.el7_2
+ libsemanage-python                                     x86_64                 2.5-14.el7
+ libyaml                                                x86_64                 0.1.4-11.el7_0
+ oci-register-machine                                   x86_64                 1:0-6.git2b44233.el7
+ oci-systemd-hook                                       x86_64                 1:0.1.18-3.git8787307.el7_6
+ oci-umount                                             x86_64                 2:2.3.4-2.git87f9237.el7
+ policycoreutils-python                                 x86_64                 2.5-29.el7_6.1
+ python-IPy                                             noarch                 0.75-6.el7
+ python-backports                                       x86_64                 1.0-8.el7
+ python-backports-ssl_match_hostname                    noarch                 3.5.0.1-1.el7
+ python-ipaddress                                       noarch                 1.0.16-2.el7
+ python-pytoml                                          noarch                 0.1.14-1.git7dea353.el7
+ python-setuptools                                      noarch                 0.9.8-7.el7
+ setools-libs                                           x86_64                 3.3.8-4.el7
+ socat                                                  x86_64                 1.7.3.2-2.el7
+ subscription-manager-rhsm-certificates                 x86_64                 1.21.10-3.el7.centos
+ yajl                                                   x86_64                 2.0.4-4.el7
+
+Transaction Summary
+===================================================================================================================================
+Install  4 Packages (+32 Dependent packages)
+
+Total download size: 82 M
+Installed size: 345 M
+Downloading packages:
+(1/36): audit-libs-python-2.8.4-4.el7.x86_64.rpm
+(2/36): checkpolicy-2.5-8.el7.x86_64.rpm
+(3/36): container-selinux-2.74-1.el7.noarch.rpm
+(4/36): containers-common-0.1.31-8.gitb0b750d.el7.centos.x86_64.rpm
+(5/36): conntrack-tools-1.4.4-4.el7.x86_64.rpm
+(6/36): container-storage-setup-0.11.0-2.git5eaf76c.el7.noarch.rpm
+(7/36): docker-client-1.13.1-94.gitb2f74b2.el7.centos.x86_64.rpm
+(8/36): docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64.rpm
+(9/36): docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64.rpm
+(10/36): atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64.rpm
+(11/36): PyYAML-3.10-11.el7.x86_64.rpm
+warning: /var/cache/yum/x86_64/7/kubernetes/packages/53edc739a0e51a4c17794de26b13ee5df939bd3161b37f503fe2af8980b41a89-cri-tools-1.1A512 Signature, key ID 3e1ba8d5: NOKEY
+Public key for 53edc739a0e51a4c17794de26b13ee5df939bd3161b37f503fe2af8980b41a89-cri-tools-1.12.0-0.x86_64.rpm is not installed
+(12/36): 53edc739a0e51a4c17794de26b13ee5df939bd3161b37f503fe2af8980b41a89-cri-tools-1.12.0-0.x86_64.rpm
+(13/36): 5c6cb3beb5142fa21020e2116824ba77a2d1389a3321601ea53af5ceefe70ad1-kubectl-1.14.1-0.x86_64.rpm
+(14/36): 9e1af74c18311f2f6f8460dbd1aa3e02911105bfd455416381e995d8172a0a01-kubeadm-1.14.1-0.x86_64.rpm
+(15/36): libcgroup-0.41-20.el7.x86_64.rpm
+(16/36): libnetfilter_cttimeout-1.0.0-6.el7.x86_64.rpm
+(17/36): libnetfilter_queue-1.0.2-2.el7_2.x86_64.rpm
+(18/36): libyaml-0.1.4-11.el7_0.x86_64.rpm
+(19/36): libsemanage-python-2.5-14.el7.x86_64.rpm
+(20/36): oci-register-machine-0-6.git2b44233.el7.x86_64.rpm
+(21/36): oci-umount-2.3.4-2.git87f9237.el7.x86_64.rpm
+(22/36): e1e8f430609698d7ec87642179ab57605925cb9aa48d406da97dedfb629bebf2-kubelet-1.14.1-0.x86_64.rpm
+(23/36): 548a0dcd865c16a50980420ddfa5fbccb8b59621179798e6dc905c9bf8af3b34-kubernetes-cni-0.7.5-0.x86_64.rpm
+(24/36): python-IPy-0.75-6.el7.noarch.rpm
+(25/36): python-backports-1.0-8.el7.x86_64.rpm
+(26/36): python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch.rpm
+(27/36): python-ipaddress-1.0.16-2.el7.noarch.rpm
+(28/36): python-pytoml-0.1.14-1.git7dea353.el7.noarch.rpm
+(29/36): python-setuptools-0.9.8-7.el7.noarch.rpm
+(30/36): socat-1.7.3.2-2.el7.x86_64.rpm
+(31/36): subscription-manager-rhsm-certificates-1.21.10-3.el7.centos.x86_64.rpm
+(32/36): yajl-2.0.4-4.el7.x86_64.rpm
+(33/36): setools-libs-3.3.8-4.el7.x86_64.rpm
+(34/36): libnetfilter_cthelper-1.0.0-9.el7.x86_64.rpm
+(35/36): oci-systemd-hook-0.1.18-3.git8787307.el7_6.x86_64.rpm
+(36/36): policycoreutils-python-2.5-29.el7_6.1.x86_64.rpm
+-----------------------------------------------------------------------------------------------------------------------------------
+Total
+Retrieving key from https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Importing GPG key 0xA7317B0F:
+ Userid     : "Google Cloud Packages Automatic Signing Key <gc-team@google.com>"
+ Fingerprint: d0bc 747f d8ca f711 7500 d6fa 3746 c208 a731 7b0f
+ From       : https://packages.cloud.google.com/yum/doc/yum-key.gpg
+Retrieving key from https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+Importing GPG key 0x3E1BA8D5:
+ Userid     : "Google Cloud Packages RPM Signing Key <gc-team@google.com>"
+ Fingerprint: 3749 e1ba 95a8 6ce0 5454 6ed2 f09c 394c 3e1b a8d5
+ From       : https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : yajl-2.0.4-4.el7.x86_64
+  Installing : 1:oci-systemd-hook-0.1.18-3.git8787307.el7_6.x86_64
+  Installing : 2:oci-umount-2.3.4-2.git87f9237.el7.x86_64
+  Installing : socat-1.7.3.2-2.el7.x86_64
+  Installing : python-ipaddress-1.0.16-2.el7.noarch
+  Installing : 1:containers-common-0.1.31-8.gitb0b750d.el7.centos.x86_64
+  Installing : libyaml-0.1.4-11.el7_0.x86_64
+  Installing : PyYAML-3.10-11.el7.x86_64
+  Installing : audit-libs-python-2.8.4-4.el7.x86_64
+  Installing : python-backports-1.0-8.el7.x86_64
+  Installing : python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch
+  Installing : python-setuptools-0.9.8-7.el7.noarch
+  Installing : 1:oci-register-machine-0-6.git2b44233.el7.x86_64
+  Installing : libsemanage-python-2.5-14.el7.x86_64
+  Installing : cri-tools-1.12.0-0.x86_64
+  Installing : setools-libs-3.3.8-4.el7.x86_64
+  Installing : python-pytoml-0.1.14-1.git7dea353.el7.noarch
+  Installing : 1:atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64
+  Installing : libnetfilter_queue-1.0.2-2.el7_2.x86_64
+  Installing : python-IPy-0.75-6.el7.noarch
+  Installing : checkpolicy-2.5-8.el7.x86_64
+  Installing : subscription-manager-rhsm-certificates-1.21.10-3.el7.centos.x86_64
+  Installing : libnetfilter_cthelper-1.0.0-9.el7.x86_64
+  Installing : container-storage-setup-0.11.0-2.git5eaf76c.el7.noarch
+  Installing : libnetfilter_cttimeout-1.0.0-6.el7.x86_64
+  Installing : conntrack-tools-1.4.4-4.el7.x86_64
+  Installing : kubernetes-cni-0.7.5-0.x86_64
+  Installing : kubelet-1.14.1-0.x86_64
+  Installing : kubectl-1.14.1-0.x86_64
+  Installing : libcgroup-0.41-20.el7.x86_64
+  Installing : policycoreutils-python-2.5-29.el7_6.1.x86_64
+  Installing : 2:container-selinux-2.74-1.el7.noarch
+  Installing : 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Installing : 2:docker-client-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Installing : 2:docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Installing : kubeadm-1.14.1-0.x86_64
+  Verifying  : libcgroup-0.41-20.el7.x86_64
+  Verifying  : python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch
+  Verifying  : kubelet-1.14.1-0.x86_64
+  Verifying  : kubectl-1.14.1-0.x86_64
+  Verifying  : libnetfilter_cttimeout-1.0.0-6.el7.x86_64
+  Verifying  : container-storage-setup-0.11.0-2.git5eaf76c.el7.noarch
+  Verifying  : libnetfilter_cthelper-1.0.0-9.el7.x86_64
+  Verifying  : 2:container-selinux-2.74-1.el7.noarch
+  Verifying  : conntrack-tools-1.4.4-4.el7.x86_64
+  Verifying  : python-setuptools-0.9.8-7.el7.noarch
+  Verifying  : subscription-manager-rhsm-certificates-1.21.10-3.el7.centos.x86_64
+  Verifying  : 1:oci-systemd-hook-0.1.18-3.git8787307.el7_6.x86_64
+  Verifying  : 2:oci-umount-2.3.4-2.git87f9237.el7.x86_64
+  Verifying  : checkpolicy-2.5-8.el7.x86_64
+  Verifying  : python-IPy-0.75-6.el7.noarch
+  Verifying  : libnetfilter_queue-1.0.2-2.el7_2.x86_64
+  Verifying  : kubeadm-1.14.1-0.x86_64
+  Verifying  : 1:atomic-registries-1.22.1-26.gitb507039.el7.centos.x86_64
+  Verifying  : python-pytoml-0.1.14-1.git7dea353.el7.noarch
+  Verifying  : setools-libs-3.3.8-4.el7.x86_64
+  Verifying  : cri-tools-1.12.0-0.x86_64
+  Verifying  : 2:docker-client-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Verifying  : policycoreutils-python-2.5-29.el7_6.1.x86_64
+  Verifying  : libsemanage-python-2.5-14.el7.x86_64
+  Verifying  : 1:oci-register-machine-0-6.git2b44233.el7.x86_64
+  Verifying  : python-backports-1.0-8.el7.x86_64
+  Verifying  : yajl-2.0.4-4.el7.x86_64
+  Verifying  : 2:docker-common-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Verifying  : audit-libs-python-2.8.4-4.el7.x86_64
+  Verifying  : libyaml-0.1.4-11.el7_0.x86_64
+  Verifying  : 2:docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+  Verifying  : 1:containers-common-0.1.31-8.gitb0b750d.el7.centos.x86_64
+  Verifying  : python-ipaddress-1.0.16-2.el7.noarch
+  Verifying  : PyYAML-3.10-11.el7.x86_64
+  Verifying  : kubernetes-cni-0.7.5-0.x86_64
+  Verifying  : socat-1.7.3.2-2.el7.x86_64
+
+Installed:
+  docker.x86_64 2:1.13.1-94.gitb2f74b2.el7.centos          kubeadm.x86_64 0:1.14.1-0          kubectl.x86_64 0:1.14.1-0          ku
+
+Dependency Installed:
+  PyYAML.x86_64 0:3.10-11.el7                                                            atomic-registries.x86_64 1:1.22.1-26.gitb5
+  audit-libs-python.x86_64 0:2.8.4-4.el7                                                 checkpolicy.x86_64 0:2.5-8.el7
+  conntrack-tools.x86_64 0:1.4.4-4.el7                                                   container-selinux.noarch 2:2.74-1.el7
+  container-storage-setup.noarch 0:0.11.0-2.git5eaf76c.el7                               containers-common.x86_64 1:0.1.31-8.gitb0b
+  cri-tools.x86_64 0:1.12.0-0                                                            docker-client.x86_64 2:1.13.1-94.gitb2f74b
+  docker-common.x86_64 2:1.13.1-94.gitb2f74b2.el7.centos                                 kubernetes-cni.x86_64 0:0.7.5-0
+  libcgroup.x86_64 0:0.41-20.el7                                                         libnetfilter_cthelper.x86_64 0:1.0.0-9.el7
+  libnetfilter_cttimeout.x86_64 0:1.0.0-6.el7                                            libnetfilter_queue.x86_64 0:1.0.2-2.el7_2
+  libsemanage-python.x86_64 0:2.5-14.el7                                                 libyaml.x86_64 0:0.1.4-11.el7_0
+  oci-register-machine.x86_64 1:0-6.git2b44233.el7                                       oci-systemd-hook.x86_64 1:0.1.18-3.git8787
+  oci-umount.x86_64 2:2.3.4-2.git87f9237.el7                                             policycoreutils-python.x86_64 0:2.5-29.el7
+  python-IPy.noarch 0:0.75-6.el7                                                         python-backports.x86_64 0:1.0-8.el7
+  python-backports-ssl_match_hostname.noarch 0:3.5.0.1-1.el7                             python-ipaddress.noarch 0:1.0.16-2.el7
+  python-pytoml.noarch 0:0.1.14-1.git7dea353.el7                                         python-setuptools.noarch 0:0.9.8-7.el7
+  setools-libs.x86_64 0:3.3.8-4.el7                                                      socat.x86_64 0:1.7.3.2-2.el7
+  subscription-manager-rhsm-certificates.x86_64 0:1.21.10-3.el7.centos                   yajl.x86_64 0:2.0.4-4.el7
+
+Complete!
+[root@knode ~]# systemctl enable docker && systemctl start docker
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+[root@knode ~]# systemctl enable kubelet && systemctl start kubelet
+Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service to /usr/lib/systemd/system/kubelet.service.
+[root@knode ~]# cat <<EOF >  /etc/sysctl.d/k8s.conf
+> net.bridge.bridge-nf-call-ip6tables = 1
+> net.bridge.bridge-nf-call-iptables = 1
+> EOF
+[root@knode ~]# sysctl net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-iptables = 1
+[root@knode ~]# sysctl net.ipv4.ip_forward=1
+net.ipv4.ip_forward = 1
+[root@knode ~]# sysctl --system
+* Applying /usr/lib/sysctl.d/00-system.conf ...
+net.bridge.bridge-nf-call-ip6tables = 0
+net.bridge.bridge-nf-call-iptables = 0
+net.bridge.bridge-nf-call-arptables = 0
+* Applying /usr/lib/sysctl.d/10-default-yama-scope.conf ...
+kernel.yama.ptrace_scope = 0
+* Applying /usr/lib/sysctl.d/50-default.conf ...
+kernel.sysrq = 16
+kernel.core_uses_pid = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.default.promote_secondaries = 1
+net.ipv4.conf.all.promote_secondaries = 1
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+* Applying /usr/lib/sysctl.d/99-docker.conf ...
+fs.may_detach_mounts = 1
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+* Applying /etc/sysctl.d/k8s.conf ...
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+* Applying /etc/sysctl.conf ...
+[root@knode ~]# echo "1" > /proc/sys/net/ipv4/ip_forward
+[root@knode ~]# systemctl daemon-reload
+[root@knode ~]# systemctl restart kubelet
+[root@knode ~]# docker version
+Client:
+ Version:         1.13.1
+ API version:     1.26
+ Package version: docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+ Go version:      go1.10.3
+ Git commit:      b2f74b2/1.13.1
+ Built:           Tue Mar 12 10:27:24 2019
+ OS/Arch:         linux/amd64
+
+Server:
+ Version:         1.13.1
+ API version:     1.26 (minimum version 1.12)
+ Package version: docker-1.13.1-94.gitb2f74b2.el7.centos.x86_64
+ Go version:      go1.10.3
+ Git commit:      b2f74b2/1.13.1
+ Built:           Tue Mar 12 10:27:24 2019
+ OS/Arch:         linux/amd64
+ Experimental:    false
+[root@knode ~]# kubelet --version
+Kubernetes v1.14.1
+[root@knode ~]# kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.1", GitCommit:"b7394102d6ef778017f2ca4046abbaa23b88c290", G19-04-08T17:08:49Z", GoVersion:"go1.12.1", Compiler:"gc", Platform:"linux/amd64"}
+[root@knode ~]# kubectl version
+Client Version: version.Info{Major:"1", Minor:"14", GitVersion:"v1.14.1", GitCommit:"b7394102d6ef778017f2ca4046abbaa23b88c290", Git-04-08T17:11:31Z", GoVersion:"go1.12.1", Compiler:"gc", Platform:"linux/amd64"}
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+[root@knode ~]#
+[root@knode ~]# kubeadm join 192.168.43.183:6443 --token dhtm1c.symjvhrr6vsh9hwp \
+>     --discovery-token-ca-cert-hash sha256:b9acbf2ae7102b3f088a85cacff8decd3ef9a4869e3b330ff011543dfd849aed
+[preflight] Running pre-flight checks
+        [WARNING Hostname]: hostname "knode" could not be reached
+        [WARNING Hostname]: hostname "knode": lookup knode on 192.168.43.1:53: no such host
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -oyaml'
+[kubelet-start] Downloading configuration for the kubelet from the "kubelet-config-1.14" ConfigMap in the kube-system namespace
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Activating the kubelet service
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+[root@knode ~]#
